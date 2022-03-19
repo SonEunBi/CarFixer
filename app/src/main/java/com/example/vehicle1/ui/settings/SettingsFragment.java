@@ -30,7 +30,7 @@ public class SettingsFragment extends ListFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //view로 설정 및 view로 반환 : textView 이용할거라
-        View view= inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View view= inflater.inflate(R.layout.fragment_center, container, false);
 
         //connect to dashboardFragment xml id.
         text1 = view.findViewById(R.id.textView);

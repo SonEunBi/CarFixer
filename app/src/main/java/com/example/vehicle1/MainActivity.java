@@ -1,10 +1,5 @@
 package com.example.vehicle1;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.example.vehicle1.ui.centerlist.CenterFragment;
 import com.example.vehicle1.ui.home.HomeFragment;
 import com.example.vehicle1.ui.mycar.MycarFragment;
@@ -28,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+
 
 // implements View.OnClickListener
 public class MainActivity extends AppCompatActivity {
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         init(); //객체 정의
         SettingListener(); //리스너 등록
 
@@ -76,12 +79,18 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState ==null){
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.home_ly, new SettingsFragment()).commitAllowingStateLoss();
+                    .add(R.id.home_ly, new HomeFragment()).commitAllowingStateLoss();
         }
         // 카메라
         imageView = findViewById(R.id.imageview);
         cameraBtnFir = findViewById(R.id.camera_button_first);
         precaution = findViewById(R.id.precautions);
+
+//        CenterFragment centerFragment = (CenterFragment) getSupportFragmentManager().findFragmentById(R.id.home_ly);
+//        centerFragment.addItem(getResources().getDrawable(R.drawable.carone, null),
+//                "현대자동차블루핸즈", "041-561-8204", "충청남도 천안시 동남구 병천면 충절로 1723", "3") ;
+//        centerFragment.addItem(ContextCompat.getDrawable(this, R.drawable.carone),
+//                "현대자동차블루핸즈", "041-561-8204", "충청남도 천안시 동남구 병천면 충절로 1723", "3") ;
 
         //fab 관리
         fab = findViewById(R.id.fab);
@@ -97,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
         // 카메라 권한 설정, 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -146,78 +156,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-// 버튼 onClick리스너 처리부분
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.camera_button_first:
-////                 카메라 앱을 여는 소스
-////                dispatchTakePictureIntent();
-////                break;
-//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(cameraIntent, TAKE_PICTURE);
-//                //사진 촬영하면 주의사항이랑 사진 촬영 버튼 사라지게 함
-//
-//                precaution.setVisibility(View.GONE);
-//                cameraBtnFir.setVisibility(View.GONE);
-//                break;
-//        }
-//    }
-
-//    // 카메라로 촬영한 영상을 가져오는 부분
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        super.onActivityResult(requestCode, resultCode, intent);
-//        switch (requestCode) {
-//            case TAKE_PICTURE:
-//                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
-//                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
-//                    if (bitmap != null) {
-//                        imageView.setImageBitmap(bitmap);
-//                    }
-//
-//                }
-//                break;
-//        }
-//    }
-
-//    //카메라 인텐트를 실행하는 함수
-//    private void dispatchTakePictureIntent() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        // Ensure that there's a camera activity to handle the intent
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            // Create the File where the photo should go
-//            File photoFile = null;
-////            try {
-////                photoFile = createImageFile();
-////            } catch (IOException ex) {
-////                // Error occurred while creating the File
-////            }
-////            // Continue only if the File was successfully created
-////            if (photoFile != null) {
-//            Uri photoURI = FileProvider.getUriForFile(this,
-//                    "com.example.myapplication2.fileprovider",
-//                    photoFile);
-//            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-//        }
-//    }
-
-
-//    //카메라로 촬영한 사진을 파일로 저장해주는 함수
-//    private File createImageFile() throws IOException {
-//        // Create an image file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-
-// Save a file: path for use with ACTION_VIEW intents
-//        mCurrentPhotoPath = image.getAbsolutePath();
-//        return image;
-//    }

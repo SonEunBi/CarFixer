@@ -29,7 +29,7 @@ public class DashboardFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //view로 설정 및 view로 반환 : textView 이용할거라
-        View view= inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View view= inflater.inflate(R.layout.fragment_center, container, false);
 
         text1 = view.findViewById(R.id.textView);
 

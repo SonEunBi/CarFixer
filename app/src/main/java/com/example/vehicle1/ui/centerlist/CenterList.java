@@ -1,53 +1,108 @@
 package com.example.vehicle1.ui.centerlist;
 
+import android.graphics.drawable.Drawable;
+
+import java.io.CharArrayReader;
+
 public class CenterList {
-    private String profile;
-    private String centerName;
-    private String phone;
-    private String address;
 
-    public int getDistance() {
-        return distance;
+
+    private int car_profile1;
+    private String car_name1;
+    private String car_address1;
+    private String car_phone1;
+    private String car_distance1;
+
+    public int getCar_profile1() {
+        return car_profile1;
     }
 
-    public void setDistance(int distance) {
-        this.distance = distance;
+    public void setCar_profile1(int car_profile1) {
+        this.car_profile1 = car_profile1;
     }
 
-    private int distance;
-
-    public CenterList() {}
-
-    public String getProfile() {
-        return profile;
+    public String getCar_name1() {
+        return car_name1;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setCar_name1(String car_name1) {
+        this.car_name1 = car_name1;
     }
 
-    public String getCenterName() {
-        return centerName;
+    public String getCar_address1() {
+        return car_address1;
     }
 
-    public void setCenterName(String centerName) {
-        this.centerName = centerName;
+    public void setCar_address1(String car_address1) {
+        this.car_address1 = car_address1;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getCar_phone1() {
+        return car_phone1;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setCar_phone1(String car_phone1) {
+        this.car_phone1 = car_phone1;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCar_distance1() {
+        return car_distance1;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCar_distance1(String car_distance1) {
+        this.car_distance1 = car_distance1;
     }
+
+    public CenterList(int car_profile1, String car_name1, String car_phone1, String car_address1, String car_distance1) {
+    this.car_profile1 = car_profile1;
+    this.car_name1 = car_name1;
+    this.car_phone1 = car_phone1;
+    this.car_distance1 = car_distance1;
+    this.car_address1 = car_address1;
+    }
+
+//
+//    public Drawable getProfile() {
+//        return this.profile;
+//    }
+//
+//    public void setProfile(Drawable profile) {
+//        profile = profile;
+//    }
+//
+//    public String getCenterName() {
+//        return this.centerName;
+//    }
+//
+//    public void setCenterName(String centerName) {
+//        centerName = centerName;
+//    }
+//
+//    public String getPhone() {
+//        return this.phone;
+//    }
+//
+//    public void setPhone(String phone) {
+//        phone = phone;
+//    }
+//
+//    public String getAddress() {
+//        return this.address;
+//    }
+//
+//    public void setAddress(String address) {address = address;
+//    }
+//
+//    public String getDistance() {
+//        return this.distance;
+//    }
+//
+//    public void setDistance(String distance) {
+//        distance = distance;
+//    }
+//
+//
+//
+
 
 }

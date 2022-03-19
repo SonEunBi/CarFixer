@@ -1,72 +1,94 @@
 package com.example.vehicle1.ui.centerlist;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.vehicle1.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CenterFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<CenterList> arrayList;
-    private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private CustomAdapter customAdapter;
+    private ArrayList<CenterList> center = new ArrayList<>();
 
-    private View view;
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_center, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true); // 리사이클러뷰 기존성능 강화
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        arrayList = new ArrayList<>(); // User 객체를 담을 어레이 리스트 (어댑터쪽으로)
+        View rootView = inflater.inflate(R.layout.fragment_center, container, false);
 
-        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
-//        StorageReference storageRef = storage.getReferenceFromUrl("gs://graduation-project-74d71.appspot.com/").child("images/" + filename);
-        databaseReference = database.getReference("carcenter_01"); // DB 테이블 연결
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
-                arrayList.clear(); // 기존 배열리스트가 존재하지않게 초기화
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
-                    CenterList CenterList = snapshot.getValue(CenterList.class); // 만들어뒀던 User 객체에 데이터를 담는다.
-                    arrayList.add(CenterList); // 담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
-                }
-                adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침해야 반영이 됨
-            }
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.re_customview);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(0);
+        customAdapter = new CustomAdapter(center, getActivity());
+        mRecyclerView.setAdapter(customAdapter);
+        mRecyclerView.setNestedScrollingEnabled(false);
+//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        return rootView;
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // 디비를 가져오던중 에러 발생 시
-                Log.e("CenterFragment", String.valueOf(databaseError.toException())); // 에러문 출력
-            }
-        });
-        adapter = new CustomAdapter(arrayList, getContext());
-        recyclerView.setAdapter(adapter); // 리사이클러뷰에 어댑터 연결
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initDataset();
+    }
 
-        return view;
+    private void initDataset() {
+        //for Test
+        center = new ArrayList<>();
+        center.add(new CenterList(R.drawable.carone, "타이어테크병천점", "041-561-8204", "충청남도 천안시 동남구 병천면 충절로 1723", "km : 3"));
+        center.add(new CenterList(R.drawable.cartwo, "병천현대써비스", "041-561-1256", "충청남도 천안시 동남구 병천면 충절로 1774", "km : 5"));
+        center.add(new CenterList(R.drawable.carthree, "대능카센터", "041-558-2494", "충청남도 천안시 동남구 충절로 1885", "km : 5"));
+        center.add(new CenterList(R.drawable.carfour, "신용카랜드", "070-7096-5373", "충청남도 천안시 동남구 충절로 1648", "km : 7"));
+        center.add(new CenterList(R.drawable.carfive, "두현카센터", "041-556-7874", "충청남도 천안시 동남구 병천면 병천1로 74", "km : 8"));
+        center.add(new CenterList(R.drawable.carsix, "제일카프라자", "041-561-0206", "충청남도 천안시 동남구 병천면 충절로 1580", "km : 11"));
+        center.add(new CenterList(R.drawable.carseven, "오륜대형카센터", " 041-536-7822", "충청남도 천안시 동남구 병천면 충절로 1300", "km : 17"));
+
+    }
+
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 }
+
+//        database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
+////        StorageReference storageRef = storage.getReferenceFromUrl("gs://graduation-project-74d71.appspot.com/").child("images/" + filename);
+//        databaseReference = database.getReference("carcenter_01"); // DB 테이블 연결
+//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
+//                arrayList.clear(); // 기존 배열리스트가 존재하지않게 초기화
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
+//                    CenterList CenterList = snapshot.getValue(CenterList.class); // 만들어뒀던 User 객체에 데이터를 담는다.
+//                    arrayList.add(CenterList); // 담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
+//                }
+//                adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침해야 반영이 됨
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                // 디비를 가져오던중 에러 발생 시
+//                Log.e("CenterFragment", String.valueOf(databaseError.toException())); // 에러문 출력
+//            }
+//        });

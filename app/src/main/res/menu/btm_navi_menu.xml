@@ -14,7 +14,7 @@
         android:id="@+id/tab_dashboard"
         android:enabled="true"
         android:icon="@drawable/ic_dashboard"
-        android:title="Dashboard" />
+        android:title="Estimate" />
     <item
         android:id="@+id/tab_settings"
         android:enabled="true"
