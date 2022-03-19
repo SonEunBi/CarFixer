@@ -56,13 +56,13 @@ public class CenterFragment extends Fragment {
     private void initDataset() {
         //for Test
         center = new ArrayList<>();
-        center.add(new CenterList(R.drawable.carone, "타이어테크병천점", "041-561-8204", "충청남도 천안시 동남구 병천면 충절로 1723", "km : 3"));
+        center.add(new CenterList(R.drawable.carone, "만도카센터", "041-561-8204", "충청남도 천안시 동남구 병천면 충절로 1723", "km : 3"));
         center.add(new CenterList(R.drawable.cartwo, "병천현대써비스", "041-561-1256", "충청남도 천안시 동남구 병천면 충절로 1774", "km : 5"));
-        center.add(new CenterList(R.drawable.carthree, "대능카센터", "041-558-2494", "충청남도 천안시 동남구 충절로 1885", "km : 5"));
-        center.add(new CenterList(R.drawable.carfour, "신용카랜드", "070-7096-5373", "충청남도 천안시 동남구 충절로 1648", "km : 7"));
-        center.add(new CenterList(R.drawable.carfive, "두현카센터", "041-556-7874", "충청남도 천안시 동남구 병천면 병천1로 74", "km : 8"));
-        center.add(new CenterList(R.drawable.carsix, "제일카프라자", "041-561-0206", "충청남도 천안시 동남구 병천면 충절로 1580", "km : 11"));
-        center.add(new CenterList(R.drawable.carseven, "오륜대형카센터", " 041-536-7822", "충청남도 천안시 동남구 병천면 충절로 1300", "km : 17"));
+        center.add(new CenterList(R.drawable.carthree, "미래카센터", "041-558-2494", "충청남도 천안시 동남구 충절로 1885", "km : 5"));
+        center.add(new CenterList(R.drawable.carfour, "공단카서비스", "070-7096-5373", "충청남도 천안시 동남구 충절로 1648", "km : 7"));
+        center.add(new CenterList(R.drawable.carfive, "굿모닝키센터", "041-556-7874", "충청남도 천안시 동남구 병천면 병천1로 74", "km : 8"));
+        center.add(new CenterList(R.drawable.carsix, "해피카센타", "041-561-0206", "충청남도 천안시 동남구 병천면 충절로 1580", "km:11"));
+        center.add(new CenterList(R.drawable.carseven, "오륜대형카센터", " 041-536-7822", "충청남도 천안시 동남구 병천면 충절로 1300", "km:17"));
 
     }
 
