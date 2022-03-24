@@ -273,7 +273,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     public void DBupload() {
 
         if (selectedImageUri != null) {
-            //업로드 진행 Dialog 보이기
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("업로드중...");
             progressDialog.show();
@@ -281,11 +280,10 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             //storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
 
-            //Unique한 파일명을 만들자.
+            //이름 설정
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
             Date now = new Date();
             String filename = formatter.format(now) + ".png";
-            //storage 주소와 폴더 파일명을 지정해 준다.
             StorageReference storageRef = storage.getReferenceFromUrl("gs://graduation-project-74d71.appspot.com/").child("images/" + filename);
             storageRef.putFile(selectedImageUri)
                     //성공시
@@ -308,7 +306,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                            @SuppressWarnings("VisibleForTests")
                             double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                             //dialog에 진행률을 퍼센트로 출력해 준다
                             progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");

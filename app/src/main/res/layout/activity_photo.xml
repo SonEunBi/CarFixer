@@ -20,7 +20,21 @@
             android:layout_width="match_parent"
             android:layout_height="480dp"/>
 <!--            android:layout_weight="9" -->
-
+        <TableLayout
+            android:stretchColumns="*">
+            <TableRow>
+                <TextView  android:text="A" />
+                <TextView  android:text="B" />
+            </TableRow>
+            <TableRow>
+                <TextView  android:text="1" />
+                <TextView  android:text="2" />
+            </TableRow>
+            <TableRow>
+                <TextView  android:text="3" />
+                <TextView  android:text="4" />
+            </TableRow>
+        </TableLayout>
 
         <!--주의사항-->
         <!--        <LinearLayout-->
@@ -29,9 +43,9 @@
         <!--            android:orientation="vertical">-->
         <!--사진 촬영 버튼-->
 
-
-
 </FrameLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

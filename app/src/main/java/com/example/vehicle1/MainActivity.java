@@ -105,16 +105,13 @@ public class MainActivity extends AppCompatActivity {
 //
 //            for(int i=0; i<jsonArray.length();i++) {
                 JSONObject jo = new JSONObject(jsonData);
-                String CarCheck = jo.getString("gate1");
-                String DamageCheck = jo.getString("gate2");
                 String Location = jo.getString("location");
                 String Severity = jo.getString("severity");
                 String final_result = jo.getString("final_result");
 
-                test1.setText("Car validation check " +
-                        "\n" + "Damage validation check " +
-                        "\n" + "Location " + Location +
-                        "\n" + "Severity " + Severity);
+                test1.setText("Location " + Location +
+                        "\n" + "Severity " + Severity+
+                        "\n" +final_result);
         }catch (IOException | JSONException e) {e.printStackTrace();}
     }
     @Override
