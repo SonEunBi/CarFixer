@@ -21,6 +21,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        useLibrary 'org.apache.http.legacy'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -32,7 +33,11 @@ android {
 }
 
 dependencies {
-     implementation 'com.google.firebase:firebase-database:20.0.3'
+    //gson 사용
+    implementation 'com.google.code.gson:gson:2.8.5'
+    //파이어베이스
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
+    implementation 'com.google.firebase:firebase-database:20.0.3'
     //파이어베이스
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-auth'

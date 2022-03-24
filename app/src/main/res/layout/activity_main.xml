@@ -39,7 +39,21 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="json parse"
+                android:onClick="clickBtn"
+                tools:ignore="OnClick" />
+            <TextView
+                android:id="@+id/test1"
+                android:textColor="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+
         </LinearLayout>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

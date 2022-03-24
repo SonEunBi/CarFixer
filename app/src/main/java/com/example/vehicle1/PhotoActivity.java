@@ -18,6 +18,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,8 +44,12 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -76,7 +82,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         lastTimeBackPressed = System.currentTimeMillis();
         Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
     }
-
+    TextView test1;
     //activity 최초 생성할 때 호출함
     //super을 붙이는 이유가 상위 클래스의 oncreate 호출하기 위해서
     @Override
@@ -84,6 +90,9 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        test1 = findViewById(R.id.test1);
+
         // 레이아웃과 변수 연결
         imageView = findViewById(R.id.imageview);
         cameraBtnFir = findViewById(R.id.camera_button_first);
@@ -116,6 +125,26 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    public void clickBtn(View view){
+        AssetManager assetManager = getAssets();
+        try{
+            InputStream is = assetManager.open("assets/test.json");
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader reader = new BufferedReader(isr);
+            StringBuffer buffer = new StringBuffer();
+            String line = reader.readLine();
+            while(line !=null){
+                buffer.append(line+"\n");
+                line=reader.readLine();
+
+            }
+            String jsonData= buffer.toString();
+            test1.setText(jsonData);
+
+        }catch (IOException e) {e.printStackTrace();}
+    }
+
+    //사진
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {

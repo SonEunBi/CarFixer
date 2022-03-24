@@ -1,0 +1,12 @@
+{"gate1": "Car validation check: ",
+  "gate1_result": 1,
+  "gate1_message":{"0": "None",    "1": "None"} ,
+
+  "gate2": "Damage presence check: ",
+  "gate2_result": 1,
+  "gate2_message": {"0": "None",    "1": "None"},
+
+  "location": "x",
+  "severity": "y",
+
+  "final_result": "Damage assessment complete!"}

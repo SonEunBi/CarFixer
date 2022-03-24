@@ -3,6 +3,7 @@ package com.example.vehicle1;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,15 +25,28 @@ import com.example.vehicle1.ui.centerlist.CenterFragment;
 import com.example.vehicle1.ui.home.HomeFragment;
 import com.example.vehicle1.ui.mycar.MycarFragment;
 import com.example.vehicle1.ui.settings.SettingsFragment;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 // implements View.OnClickListener
 public class MainActivity extends AppCompatActivity {
+
     //카메라
     final String TAG = getClass().getSimpleName();
     ImageView imageView;
@@ -44,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     private long lastTimeBackPressed;
     FloatingActionButton fab;
+    TextView test1;
+
 
     private void init() {
 //        home_ly = findViewById(R.id.home_ly);
@@ -66,17 +82,52 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
     }
 
+
+    public void clickBtn(View view){
+        AssetManager assetManager = getAssets();
+        try{
+            InputStream is = assetManager.open("jsons/test.json");
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader reader = new BufferedReader(isr);
+            StringBuffer buffer = new StringBuffer();
+            String line = reader.readLine();
+            while(line !=null){
+                buffer.append(line+"\n");
+                line=reader.readLine();
+
+            }
+            String jsonData= buffer.toString();
+
+//            JSONArray jsonArray = new JSONArray(jsonData);
+//
+//            String s="";
+//            //json 배열이므로 array로 처리
+//
+//            for(int i=0; i<jsonArray.length();i++) {
+                JSONObject jo = new JSONObject(jsonData);
+                String CarCheck = jo.getString("gate1");
+                String DamageCheck = jo.getString("gate2");
+                String Location = jo.getString("location");
+                String Severity = jo.getString("severity");
+                String final_result = jo.getString("final_result");
+
+                test1.setText("Car validation check " +
+                        "\n" + "Damage validation check " +
+                        "\n" + "Location " + Location +
+                        "\n" + "Severity " + Severity);
+        }catch (IOException | JSONException e) {e.printStackTrace();}
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        test1 = findViewById(R.id.test1);
         init(); //객체 정의
         SettingListener(); //리스너 등록
 
         //새로운 activity 생성된 후 fragment에 재연결될 때 fragment 추가된 내용 기억
-        if(savedInstanceState ==null){
+        if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.home_ly, new HomeFragment()).commitAllowingStateLoss();
@@ -85,12 +136,6 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageview);
         cameraBtnFir = findViewById(R.id.camera_button_first);
         precaution = findViewById(R.id.precautions);
-
-//        CenterFragment centerFragment = (CenterFragment) getSupportFragmentManager().findFragmentById(R.id.home_ly);
-//        centerFragment.addItem(getResources().getDrawable(R.drawable.carone, null),
-//                "현대자동차블루핸즈", "041-561-8204", "충청남도 천안시 동남구 병천면 충절로 1723", "3") ;
-//        centerFragment.addItem(ContextCompat.getDrawable(this, R.drawable.carone),
-//                "현대자동차블루핸즈", "041-561-8204", "충청남도 천안시 동남구 병천면 충절로 1723", "3") ;
 
         //fab 관리
         fab = findViewById(R.id.fab);
@@ -117,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
     // 권한 요청
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
