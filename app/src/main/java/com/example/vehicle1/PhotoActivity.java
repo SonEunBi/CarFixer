@@ -11,22 +11,17 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,11 +29,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -49,6 +42,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -82,7 +78,9 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         lastTimeBackPressed = System.currentTimeMillis();
         Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
     }
+
     TextView test1;
+
     //activity 최초 생성할 때 호출함
     //super을 붙이는 이유가 상위 클래스의 oncreate 호출하기 위해서
     @Override
@@ -125,23 +123,25 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void clickBtn(View view){
+    public void clickBtn(View view) {
         AssetManager assetManager = getAssets();
-        try{
+        try {
             InputStream is = assetManager.open("assets/test.json");
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader reader = new BufferedReader(isr);
             StringBuffer buffer = new StringBuffer();
             String line = reader.readLine();
-            while(line !=null){
-                buffer.append(line+"\n");
-                line=reader.readLine();
+            while (line != null) {
+                buffer.append(line + "\n");
+                line = reader.readLine();
 
             }
-            String jsonData= buffer.toString();
+            String jsonData = buffer.toString();
             test1.setText(jsonData);
 
-        }catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //사진
@@ -224,6 +224,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.uploadBtn:
                 DBupload();
+                httpGetConnection(url, data);
                 selectedImageUri = null;
                 break;
         }
@@ -316,8 +317,64 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
     }
-}
 
+    String url = "http://172.19.98.71:8080/assessment";
+    String data = "url=https://modo-phinf.pstatic.net/20190826_221/1566810773449mMq4j_JPEG/mosauv6ibr.jpeg";
+
+    public static void httpGetConnection(String UrlData, String ParamData) {
+        String totalUrl = "";
+        if (ParamData != null && ParamData.length() > 0 &&
+                !ParamData.equals("") && !ParamData.contains("null")) { //파라미터 값이 널값이 아닌지 확인
+            totalUrl = UrlData.trim().toString() + "?" + ParamData.trim().toString();
+        } else {
+            totalUrl = UrlData.trim().toString();
+        }
+        HttpURLConnection connection = null;
+        String responseData = "";
+        String returnData = "";
+        BufferedReader br = null;
+        StringBuffer sb = null;
+
+        try {
+            URL url = new URL(totalUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            // http 요청에 필요한 타입 정의 실시
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestMethod("GET");
+
+            // http 요청 실시
+            connection.connect();
+
+            br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            sb = new StringBuffer();
+
+            while ((responseData = br.readLine()) != null) {
+                sb.append(responseData); //StringBuffer에 응답받은 데이터 순차적으로 저장 실시
+            }
+
+            returnData = sb.toString();
+
+            System.out.println(returnData);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // http 요청 및 응답 완료 후 BufferedReader를 닫아줍니다
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
 // 이미지 돌려주는 함수
 //    public static Bitmap rotateImage(Bitmap source, float angle) {
 //        Matrix matrix = new Matrix();
