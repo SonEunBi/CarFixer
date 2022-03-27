@@ -18,20 +18,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.vehicle1.ui.centerlist.CenterFragment;
 import com.example.vehicle1.ui.home.HomeFragment;
 import com.example.vehicle1.ui.mycar.MycarFragment;
-import com.example.vehicle1.ui.settings.SettingsFragment;
-import com.google.android.gms.tasks.Task;
+import com.example.vehicle1.ui.result.CarResult;
+import com.example.vehicle1.ui.result.ResultFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,9 +36,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 // implements View.OnClickListener
@@ -82,38 +77,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
     }
 
-
-    public void clickBtn(View view){
-        AssetManager assetManager = getAssets();
-        try{
-            InputStream is = assetManager.open("jsons/test.json");
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader reader = new BufferedReader(isr);
-            StringBuffer buffer = new StringBuffer();
-            String line = reader.readLine();
-            while(line !=null){
-                buffer.append(line+"\n");
-                line=reader.readLine();
-
-            }
-            String jsonData= buffer.toString();
-
-//            JSONArray jsonArray = new JSONArray(jsonData);
-//
-//            String s="";
-//            //json 배열이므로 array로 처리
-//
-//            for(int i=0; i<jsonArray.length();i++) {
-                JSONObject jo = new JSONObject(jsonData);
-                String Location = jo.getString("location");
-                String Severity = jo.getString("severity");
-                String final_result = jo.getString("final_result");
-
-                test1.setText("Location " + Location +
-                        "\n" + "Severity " + Severity+
-                        "\n" +final_result);
-        }catch (IOException | JSONException e) {e.printStackTrace();}
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,8 +154,12 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new CenterFragment()).commitAllowingStateLoss();
                     return true;
                 }
-                case R.id.tab_settings: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new SettingsFragment()).commitAllowingStateLoss();
+//                case R.id.tab_settings: {
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new SettingsFragment()).commitAllowingStateLoss();
+//                    return true;
+//                }
+                case R.id.tab_result: {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new ResultFragment()).commitAllowingStateLoss();
                     return true;
                 }
             }

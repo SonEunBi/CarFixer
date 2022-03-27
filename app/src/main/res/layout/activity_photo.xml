@@ -19,22 +19,9 @@
             android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="480dp"/>
-<!--            android:layout_weight="9" -->
-        <TableLayout
-            android:stretchColumns="*">
-            <TableRow>
-                <TextView  android:text="A" />
-                <TextView  android:text="B" />
-            </TableRow>
-            <TableRow>
-                <TextView  android:text="1" />
-                <TextView  android:text="2" />
-            </TableRow>
-            <TableRow>
-                <TextView  android:text="3" />
-                <TextView  android:text="4" />
-            </TableRow>
-        </TableLayout>
+
+        <!--            android:layout_weight="9" -->
+
 
         <!--주의사항-->
         <!--        <LinearLayout-->
@@ -76,6 +63,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
+        android:orientation="vertical"/>
+
+        <Button
+            android:id="@+id/print_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="clickBtn"
+            android:layout_weight="1"
+            android:layout_margin="80dp"
+            android:layout_gravity="bottom"
+            android:backgroundTint="@color/black"
+            android:text="분석 결과"
+            tools:ignore="OnClick" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
         android:orientation="horizontal">
         <Button
 
@@ -97,5 +101,4 @@
             android:backgroundTint="@color/black"
             android:text="사진 업로드" />
     </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

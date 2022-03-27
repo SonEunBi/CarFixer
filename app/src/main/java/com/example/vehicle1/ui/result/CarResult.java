@@ -1,8 +1,10 @@
-package com.example.vehicle1;
+package com.example.vehicle1.ui.result;
+
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
-public class CarResult{
+public class CarResult {
 
     private String gate1;
     private String gate2;

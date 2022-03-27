@@ -15,9 +15,10 @@
         android:enabled="true"
         android:icon="@drawable/ic_dashboard"
         android:title="Estimate" />
+
     <item
-        android:id="@+id/tab_settings"
+        android:id="@+id/tab_result"
         android:enabled="true"
         android:icon="@drawable/ic_user"
-        android:title="MyPage" />
+        android:title="result" />
 </menu>

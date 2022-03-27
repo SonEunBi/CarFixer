@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vehicle1.ui.result.ResultFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -79,7 +83,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
     }
 
-    TextView test1;
 
     //activity 최초 생성할 때 호출함
     //super을 붙이는 이유가 상위 클래스의 oncreate 호출하기 위해서
@@ -89,7 +92,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        test1 = findViewById(R.id.test1);
+      //  test1 = findViewById(R.id.test1);
 
         // 레이아웃과 변수 연결
         imageView = findViewById(R.id.imageview);
@@ -107,6 +110,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요."), 0);
                 DBupload();
+
             }
         });
 
@@ -123,26 +127,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void clickBtn(View view) {
-        AssetManager assetManager = getAssets();
-        try {
-            InputStream is = assetManager.open("assets/test.json");
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader reader = new BufferedReader(isr);
-            StringBuffer buffer = new StringBuffer();
-            String line = reader.readLine();
-            while (line != null) {
-                buffer.append(line + "\n");
-                line = reader.readLine();
 
-            }
-            String jsonData = buffer.toString();
-            test1.setText(jsonData);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     //사진
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
@@ -150,17 +135,21 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    //사진 촬영 후 응답
+                    //사진 촬영 후 가져오기
+                    //리퀘스트가 0이면
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
+                        //uri 불러오기
                         selectedImageUri = data.getData();
+                        //log를 통해서 바로 uri를 볼 수 있음
                         Log.d(TAG, "uri:" + String.valueOf(selectedImageUri));
                         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                         if (bitmap != null) {
                             imageView.setImageBitmap(bitmap);
-
                             String imageSaveUri = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "사진 저장", "찍은 사진이 저장되었습니다.");
                             selectedImageUri = Uri.parse(imageSaveUri);
+
+
                             Log.d(TAG, "PhotoActivity - onActivityResult() called" + selectedImageUri);
                         }
                     }
@@ -168,7 +157,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             });
 
     public void openSomeActivityForResult() throws IOException {
-
+//인텐트 객체 생성
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         someActivityResultLauncher.launch(takePictureIntent);
 //createImageFile 만들어서 넣고,
@@ -184,9 +173,9 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.vehicle1.fileprovider",
                         photoFile);
+                //카메라 앱에서 찍은 사진을 저장할 위치 설정
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             }
-            DBupload();
         }
 //        //ACTION_~ 을 통해서 갤러리에 사진을 업데이트함 - 여기 때문에 오류 생김
 //        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -224,18 +213,23 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.uploadBtn:
                 DBupload();
-                httpGetConnection(url, data);
+//                clickBtn(imageView);
+//                httpGetConnection(url, data);
                 selectedImageUri = null;
                 break;
+            case R.id.print_result:
+                imageView.setVisibility(View.GONE);
+                cameraBtnFir.setVisibility(View.GONE);
+                uploadBtn.setVisibility(View.GONE);
+                //getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new ResultFragment()).commitAllowingStateLoss();
+                break;
         }
-
     }
 
-    // 카메라로 촬영한 영상을 가져오는 부분
+        // 카메라로 촬영한 영상을 가져오는 부분
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
         try {
             switch (requestCode) {
                 case REQUEST_TAKE_PHOTO: {
@@ -278,14 +272,17 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             progressDialog.setTitle("업로드중...");
             progressDialog.show();
 
-            //storage
+            //storage 객체 생성
             FirebaseStorage storage = FirebaseStorage.getInstance();
 
             //이름 설정
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd_HHmmss");
             Date now = new Date();
             String filename = formatter.format(now) + ".png";
             StorageReference storageRef = storage.getReferenceFromUrl("gs://graduation-project-74d71.appspot.com/").child("images/" + filename);
+
+
+            //여기를 수정해야 함
             storageRef.putFile(selectedImageUri)
                     //성공시
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -321,6 +318,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     String url = "http://172.19.98.71:8080/assessment";
     String data = "url=https://modo-phinf.pstatic.net/20190826_221/1566810773449mMq4j_JPEG/mosauv6ibr.jpeg";
 
+
     public static void httpGetConnection(String UrlData, String ParamData) {
         String totalUrl = "";
         if (ParamData != null && ParamData.length() > 0 &&
@@ -339,7 +337,9 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             URL url = new URL(totalUrl);
             connection = (HttpURLConnection) url.openConnection();
             // http 요청에 필요한 타입 정의 실시
+            //request header값 세팅 - json 형식의 타입으로 요청
             connection.setRequestProperty("Accept", "application/json");
+            //타입설정 형식으로 전송
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestMethod("GET");
 
