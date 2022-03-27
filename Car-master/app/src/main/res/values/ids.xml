@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tab_settings" type="id" />
+    <item name="tab_home" type="id" />
+    <item name="tab_mycar" type="id" />
+    <item name="tab_dashboard" type="id" />
+    <item name="recyclerView" type="id" />
+    <item name="car_profile1" type="id" />
+    <item name="car_phone1" type="id" />
+    <item name="car_address1" type="id" />
+    <item name="car_name1" type="id" />
+    <item name="car_distance1" type="id" />
+    <item name="textView" type="id" />
+    <item name="uploadBtn" type="id" />
+    <item name="mobile_navigation" type="id" />
+    <item name="navigation_home" type="id" />
+</resources>

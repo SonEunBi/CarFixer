@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity_main2">
+    <!--촬영 후 이미지가 뜨는 곳-->
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="690dp"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:id="@+id/home_ly"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <!--주의사항-->
+        <TextView
+            android:id="@+id/precautions"
+            android:layout_width="400dp"
+            android:layout_height="408dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/edge_textview"
+            android:fontFamily="casual"
+            android:padding="7dp"
+            android:text="\n
+▶ 결함 부분을 중앙에 맞추어 초점을 조정해 주십시오.\n\n
+▶ 물체와의 거리를 최소 20cm 이상 유지해 주십시오.\n\n
+▶ 밝은 곳에서 촬영을 진행해 주십시오.\n\n
+▶ 최대한 그림자가 생기지 않도록 사진을 촬영해 주십시오.\n\n
+▶ 이미지 분석하는 데에 있어서 시간이 소요될 수 있습니\n&#160;&#160;&#160;&#160;&#160;다.\n\n
+▶ 카메라 성능과 채광에 따라 사진 분석에 약간의 오차가\n&#160;&#160;&#160;&#160;&#160;발생할 수 있습니다.\n\n
+▶ 사진을 촬영할 준비가 되었다면 하단의 버튼을 누르십시\n&#160;&#160;&#160;&#160;&#160;오.\n\n"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/header"
+            app:layout_constraintHorizontal_bias="0.0" />
+        <!--사진 촬영 버튼-->
+
+        <Button
+            android:id="@+id/camera_button_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:background="@color/lightpurple"
+            android:text="사진 촬영"
+            />
+
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
