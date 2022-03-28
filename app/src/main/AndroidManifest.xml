@@ -43,13 +43,15 @@
         <activity
             android:name=".PhotoActivity"
             android:label="Camera"
+            android:exported="true"
             android:theme="@style/Theme.Vehicle1"></activity>
 
         <activity
             android:name=".CalendarActivity"
             android:label="Calendar"
             android:theme="@style/Theme.Vehicle1"></activity>
-
+<!--        android:exported="true" - fileprovider를 앱 외부에서도 사용 가능-->
+<!--        android:exported="true"로 했더니 앱이 안 켜짐-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.vehicle1.fileprovider"

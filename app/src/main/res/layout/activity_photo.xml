@@ -64,7 +64,14 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:orientation="vertical"/>
+    <TextView
+        android:id="@+id/testurl"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
 
+        android:layout_margin="130dp"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"/>
         <Button
             android:id="@+id/print_result"
             android:layout_width="match_parent"

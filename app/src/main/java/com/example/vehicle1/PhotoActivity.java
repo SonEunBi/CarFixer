@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -21,6 +23,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.vehicle1.ui.result.ResultFragment;
+//import com.example.vehicle1.ui.result.ResultFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +46,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -62,6 +67,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     TextView precaution;
     Button uploadBtn;
 
+    private int GALLERY_CODE = 10;
     Uri selectedImageUri;
     private ActivityResultLauncher<Intent> resultLauncher;
     final static int TAKE_PICTURE = 1;
@@ -92,7 +98,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-      //  test1 = findViewById(R.id.test1);
+        //  test1 = findViewById(R.id.test1);
 
         // 레이아웃과 변수 연결
         imageView = findViewById(R.id.imageview);
@@ -105,12 +111,15 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                //갤러리 호출
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요."), 0);
+                new ActivityResult(GALLERY_CODE, intent);
+                //  startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요."), 0);
                 DBupload();
-
             }
         });
 
@@ -128,7 +137,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
     //사진
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -137,7 +145,8 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 public void onActivityResult(ActivityResult result) {
                     //사진 촬영 후 가져오기
                     //리퀘스트가 0이면
-                    if (result.getResultCode() == Activity.RESULT_OK) {
+                    //result.getResultCode() == GALLERY_CODE &&
+                    if ( result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         //uri 불러오기
                         selectedImageUri = data.getData();
@@ -149,12 +158,24 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                             String imageSaveUri = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "사진 저장", "찍은 사진이 저장되었습니다.");
                             selectedImageUri = Uri.parse(imageSaveUri);
 
-
                             Log.d(TAG, "PhotoActivity - onActivityResult() called" + selectedImageUri);
                         }
                     }
                 }
+//                    else if (result.getResultCode() == GALLERY_CODE) {
+//                        try {
+//                            //storage 객체 생성
+//                            FirebaseStorage storage = FirebaseStorage.getInstance();
+//
+//                            StorageReference storageRef = storage.getReference();
+//
+//                            Uri file = Uri.fromFile(new File(selectedImageUri));
+//                            final StorageReference riversRef = storageRef.child("images/" + file.getLastPathSegment());
+//                            UploadTask uploadTask = riversRef.putFile(file);
+//                        }
+//                    }
             });
+
 
     public void openSomeActivityForResult() throws IOException {
 //인텐트 객체 생성
@@ -175,10 +196,11 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                         photoFile);
                 //카메라 앱에서 찍은 사진을 저장할 위치 설정
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
             }
         }
-//        //ACTION_~ 을 통해서 갤러리에 사진을 업데이트함 - 여기 때문에 오류 생김
-//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        //ACTION_~ 을 통해서 갤러리에 사진을 업데이트함 - 여기 때문에 오류 생김
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_PICK);
 //        Uri contentUri = Uri.fromFile(new File(mCurrentPhotoPath));
 //        mediaScanIntent.setData(contentUri);
 //        //이걸로 인텐트 전송함
@@ -198,6 +220,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // 버튼 onClick 리스너 처리부분
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -226,7 +249,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-        // 카메라로 촬영한 영상을 가져오는 부분
+    // 카메라로 촬영한 영상을 가져오는 부분
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -279,12 +302,10 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd_HHmmss");
             Date now = new Date();
             String filename = formatter.format(now) + ".png";
-            StorageReference storageRef = storage.getReferenceFromUrl("gs://graduation-project-74d71.appspot.com/").child("images/" + filename);
-
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://project01-232ff.appspot.com/").child("images/" + filename);
 
             //여기를 수정해야 함
-            storageRef.putFile(selectedImageUri)
-                    //성공시
+            storageRef.putFile(selectedImageUri)//성공시
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -314,12 +335,53 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
     }
+//찍은 사진을 갤러리에 저장하는 함수
+//    private void saveFile(Uri image_uri) {
+//
+//        ContentValues values = new ContentValues();
+//        String fileName =  "woongs"+System.currentTimeMillis()+".png";
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME,fileName);
+//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            values.put(MediaStore.Images.Media.IS_PENDING, 1);
+//        }
+//
+//        ContentResolver contentResolver = getContentResolver();
+//        Uri item = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//
+//        try {
+//            ParcelFileDescriptor pdf = contentResolver.openFileDescriptor(item, "w", null);
+//            if (pdf == null) {
+//                Log.d("Woongs", "null");
+//            } else {
+//                byte[] inputData = getBytes(image_uri);
+//                FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
+//                fos.write(inputData);
+//                fos.close();
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                    values.clear();
+//                    values.put(MediaStore.Images.Media.IS_PENDING, 0);
+//                    contentResolver.update(item, values, null, null);
+//                }
+//
+//                // 갱신
+//                galleryAddPic(fileName);
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            Log.d("Woongs", "FileNotFoundException  : "+e.getLocalizedMessage());
+//        } catch (Exception e) {
+//            Log.d("Woongs", "FileOutputStream = : " + e.getMessage());
+//        }
+//    }
+
 
     String url = "http://172.19.98.71:8080/assessment";
     String data = "url=https://modo-phinf.pstatic.net/20190826_221/1566810773449mMq4j_JPEG/mosauv6ibr.jpeg";
 
 
-    public static void httpGetConnection(String UrlData, String ParamData) {
+    public void httpGetConnection(String UrlData, String ParamData) {
         String totalUrl = "";
         if (ParamData != null && ParamData.length() > 0 &&
                 !ParamData.equals("") && !ParamData.contains("null")) { //파라미터 값이 널값이 아닌지 확인

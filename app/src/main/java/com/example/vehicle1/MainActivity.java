@@ -23,8 +23,8 @@ import androidx.fragment.app.Fragment;
 import com.example.vehicle1.ui.centerlist.CenterFragment;
 import com.example.vehicle1.ui.home.HomeFragment;
 import com.example.vehicle1.ui.mycar.MycarFragment;
-import com.example.vehicle1.ui.result.CarResult;
-import com.example.vehicle1.ui.result.ResultFragment;
+//import com.example.vehicle1.ui.result.CarResult;
+//import com.example.vehicle1.ui.result.ResultFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -158,10 +158,10 @@ public class MainActivity extends AppCompatActivity {
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new SettingsFragment()).commitAllowingStateLoss();
 //                    return true;
 //                }
-                case R.id.tab_result: {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new ResultFragment()).commitAllowingStateLoss();
-                    return true;
-                }
+//                case R.id.tab_result: {
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new ResultFragment()).commitAllowingStateLoss();
+//                    return true;
+//                }
             }
             return false;
         }
