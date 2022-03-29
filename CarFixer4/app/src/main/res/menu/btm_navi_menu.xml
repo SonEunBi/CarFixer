@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/tab_mycar"
+        android:enabled="true"
+        android:icon="@drawable/ic_car"
+        android:title="MyCar" />
+    <item
+        android:id="@+id/tab_dashboard"
+        android:enabled="true"
+        android:icon="@drawable/ic_dashboard"
+        android:title="Estimate" />
+
+    <item
+        android:id="@+id/tab_result"
+        android:enabled="true"
+        android:icon="@drawable/ic_user"
+        android:title="result" />
+</menu>
