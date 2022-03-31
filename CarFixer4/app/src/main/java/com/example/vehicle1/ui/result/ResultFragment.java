@@ -22,7 +22,6 @@
 //import java.io.IOException;
 //import java.io.InputStream;
 //import java.io.InputStreamReader;
-//
 //public class ResultFragment extends Fragment {
 //
 //    private int GALLEY_CODE = 10;
@@ -43,7 +42,7 @@
 //    private String getRealPathFromUri(Uri uri)
 //    {
 //        String[] proj=  {MediaStore.Images.Media.DATA};
-//        CursorLoader cursorLoader = new CursorLoader(this,uri,proj,null,null,null);
+//        CursorLoader  cursorLoader = new CursorLoader(this,uri,proj,null,null,null);
 //        Cursor cursor = cursorLoader.loadInBackground();
 //
 //        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -64,7 +63,6 @@
 //            while (line != null) {
 //                buffer.append(line + "\n");
 //                line = reader.readLine();
-//
 //            }
 //            String jsonData = buffer.toString();
 //            test1.setText(jsonData);

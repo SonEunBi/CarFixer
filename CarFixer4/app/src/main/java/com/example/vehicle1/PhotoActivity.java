@@ -240,12 +240,12 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
 //                httpGetConnection(url, data);
                 selectedImageUri = null;
                 break;
-            case R.id.print_result:
-                imageView.setVisibility(View.GONE);
-                cameraBtnFir.setVisibility(View.GONE);
-                uploadBtn.setVisibility(View.GONE);
-                //getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new ResultFragment()).commitAllowingStateLoss();
-                break;
+//            case R.id.print_result:
+//                imageView.setVisibility(View.GONE);
+//                cameraBtnFir.setVisibility(View.GONE);
+//                uploadBtn.setVisibility(View.GONE);
+//                getSupportFragmentManager().beginTransaction().replace(R.id.home_ly, new ResultFragment()).commitAllowingStateLoss();
+//                break;
         }
     }
 
@@ -449,7 +449,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onSuccess(Uri uri) {
                 Toast.makeText(getApplicationContext(), "URL주소 : " + uri.toString(), Toast.LENGTH_SHORT).show();
-                String url = "http://172.19.88.4:8080/assessment";
+                String url = "http://172.19.88.34:8080/assessment";
                 String data = "url=" + uri.toString();
                 Log.d(TAG, "uri:" + data);
                 httpGetConnection(url, data);
